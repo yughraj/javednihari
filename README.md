@@ -1334,7 +1334,7 @@ footer {
       </div>
       
       <div class="menu-card">
-        <div class="menu-card-img" style="background-image: url('https://images.unsplash.com/photo-1606502281004-f4ed1456ce3c?w=800&auto=format&fit=crop&q=85');"></div>
+        <div class="menu-card-img" style="background-image: url('https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=800&auto=format&fit=crop&q=85');"></div>
         <div class="menu-card-content">
           <h3 class="menu-card-title">Sheermal</h3>
           <p class="menu-card-desc">Sweet saffron-infused flatbread, baked golden. A traditional pairing dating back to Mughal-era kitchens.</p>
