@@ -1049,7 +1049,7 @@ footer { background: linear-gradient(180deg, var(--bg) 0%, #060402 100%); paddin
           <p class="location-info"><span class="icon">◷</span> Daily · 8:00 AM – 12:00 AM · Sunday from 6:00 AM</p>
           <p class="location-info"><span class="icon">☎</span> 0311-4422786 · 0324-7860881 · 021-36372111</p>
           <div class="location-buttons">
-            <a href="tel:+923247860881" class="btn-location primary">Call Now</a>
+            <a href="tel:+923333672590" class="btn-location primary">Call Now</a>
             <a href="https://www.google.com/maps/place/Javed+Nihari/@24.9282014,67.0750023,17z/data=!3m1!4b1!4m6!3m5!1s0x3eb33f4148864f51:0x11885c9e5b3eba2c!8m2!3d24.9282014!4d67.0750023" target="_blank" class="btn-location secondary">Directions</a>
           </div>
         </div>
@@ -1086,7 +1086,6 @@ footer { background: linear-gradient(180deg, var(--bg) 0%, #060402 100%); paddin
     <h3>Your <em>Order</em></h3>
     <button class="cart-close" onclick="closeCart()">✕</button>
   </div>
-  <div class="demo-banner">⚠ Concept design · Demo ordering only · No real orders placed</div>
   <div class="cart-items" id="cartItems">
     <div class="cart-empty" id="cartEmpty">
       <div class="icon">🍲</div>
@@ -1176,16 +1175,15 @@ footer { background: linear-gradient(180deg, var(--bg) 0%, #060402 100%); paddin
     
     <div class="summary" id="orderSummary"></div>
     
-    <div class="demo-warning">
-      <strong>⚠ Concept Design Notice</strong>
-      This website is not live to sell products. It is a speculative design concept created by Yugh Studio for portfolio purposes and is not officially affiliated with any restaurant. No real order has been placed, no payment has been collected, and no data has been transmitted or stored.
-    </div>
+    <p style="color: var(--text-soft); font-size: 0.88rem; margin: 1rem 0;">
+      Our team will call you shortly to confirm. For any changes, WhatsApp us at <strong style="color: var(--gold);">0333-3672590</strong>.
+    </p>
     
     <button class="success-close" onclick="closeSuccess()">Got it</button>
   </div>
 </div>
 
-<a href="https://wa.me/923247860881?text=Salaam!%20I%20would%20like%20to%20place%20an%20order" target="_blank" class="whatsapp-float" aria-label="Order on WhatsApp">
+<a href="https://wa.me/923333672590?text=Salaam!%20I%20would%20like%20to%20place%20an%20order" target="_blank" class="whatsapp-float" aria-label="Order on WhatsApp">
   <svg viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
 </a>
 
@@ -1228,16 +1226,16 @@ footer { background: linear-gradient(180deg, var(--bg) 0%, #060402 100%); paddin
       </div>
     </div>
     <div class="footer-bottom">
-      <div class="footer-bottom-text">Concept design · Not affiliated with any existing restaurant</div>
+      <div class="footer-bottom-text">© 2026 Javed Nihari. All rights reserved.</div>
       <div class="social-row">
         <a href="#" class="social-icon" aria-label="Facebook">f</a>
         <a href="#" class="social-icon" aria-label="Instagram">⊡</a>
         <a href="#" class="social-icon" aria-label="YouTube">▶</a>
-        <a href="#" class="social-icon" aria-label="WhatsApp">✆</a>
+        <a href="https://wa.me/923333672590" class="social-icon" aria-label="WhatsApp">✆</a>
       </div>
     </div>
     <p class="disclaimer">
-      This is a speculative design concept created for portfolio purposes. Not officially affiliated with any restaurant brand. Designed by <a href="#" target="_blank">Yugh Studio</a>.
+      Website by <a href="#" target="_blank">Yugh Studio</a>
     </p>
   </div>
 </footer>
@@ -1492,22 +1490,64 @@ function selectOrderType(type, el) {
 function confirmOrder(e) {
   e.preventDefault();
   
-  const name = document.getElementById('coName').value;
-  const phone = document.getElementById('coPhone').value;
+  const name = document.getElementById('coName').value.trim();
+  const phone = document.getElementById('coPhone').value.trim();
+  const address = document.getElementById('coAddress').value.trim();
+  const area = document.getElementById('coArea').value.trim();
+  const notes = document.getElementById('coNotes').value.trim();
   
-  if (orderType === 'delivery' && !document.getElementById('coAddress').value) {
+  if (orderType === 'delivery' && !address) {
     alert('Please enter your delivery address');
     return;
   }
   
-  // Generate fake order number
-  const orderNo = 'JN-' + Math.floor(10000 + Math.random() * 90000);
+  // Generate sequential-style order number using timestamp
+  const orderNo = 'JN-' + (Math.floor(Date.now() / 1000) % 100000).toString().padStart(5, '0');
   
-  // Build summary
+  // Calculate totals
   const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
   const delivery = orderType === 'pickup' ? 0 : DELIVERY_FEE;
   const total = subtotal + delivery;
   
+  // Build WhatsApp message
+  let waMessage = `*NEW ORDER — JAVED NIHARI*%0A`;
+  waMessage += `━━━━━━━━━━━━━━━━%0A`;
+  waMessage += `*Order No:* ${orderNo}%0A`;
+  waMessage += `*Customer:* ${name}%0A`;
+  waMessage += `*Phone:* ${phone}%0A`;
+  waMessage += `*Order Type:* ${orderType === 'pickup' ? 'Branch Pickup' : 'Home Delivery'}%0A`;
+  if (orderType === 'delivery') {
+    waMessage += `*Address:* ${address}%0A`;
+    if (area) waMessage += `*Area:* ${area}%0A`;
+  }
+  waMessage += `━━━━━━━━━━━━━━━━%0A`;
+  waMessage += `*ITEMS:*%0A`;
+  cart.forEach(item => {
+    waMessage += `${item.qty}× ${item.name} — Rs. ${(item.price * item.qty).toLocaleString()}%0A`;
+  });
+  waMessage += `━━━━━━━━━━━━━━━━%0A`;
+  waMessage += `*Subtotal:* Rs. ${subtotal.toLocaleString()}%0A`;
+  waMessage += `*${orderType === 'pickup' ? 'Pickup' : 'Delivery Fee'}:* ${delivery === 0 ? 'Free' : 'Rs. ' + delivery.toLocaleString()}%0A`;
+  waMessage += `*TOTAL: Rs. ${total.toLocaleString()}*%0A`;
+  waMessage += `━━━━━━━━━━━━━━━━%0A`;
+  waMessage += `*Payment:* Cash on Delivery%0A`;
+  if (notes) waMessage += `*Notes:* ${notes}%0A`;
+  waMessage += `━━━━━━━━━━━━━━━━%0A`;
+  waMessage += `_Order placed via javednihari.com_`;
+  
+  // Restaurant's WhatsApp number for receiving orders
+  const RESTAURANT_WA = '923333672590';
+  const waUrl = `https://wa.me/${RESTAURANT_WA}?text=${waMessage}`;
+  
+  // Save order to localStorage as backup (so we have a record even if Firebase isn't set up yet)
+  saveOrderLocally({
+    orderNo, name, phone, address, area, notes,
+    orderType, items: [...cart], subtotal, delivery, total,
+    timestamp: new Date().toISOString(),
+    status: 'pending'
+  });
+  
+  // Build summary for success screen
   let summaryHTML = '';
   cart.forEach(item => {
     summaryHTML += `<div class="summary-row"><span>${item.qty}× ${item.name}</span><span>Rs. ${(item.price * item.qty).toLocaleString()}</span></div>`;
@@ -1524,6 +1564,25 @@ function confirmOrder(e) {
   
   closeCheckout();
   document.getElementById('successModal').classList.add('open');
+  
+  // Open WhatsApp with the order in a new tab
+  // Small delay so success modal shows first
+  setTimeout(() => {
+    window.open(waUrl, '_blank');
+  }, 800);
+}
+
+// Save orders locally so admin page can see them even without Firebase
+function saveOrderLocally(order) {
+  try {
+    const orders = JSON.parse(localStorage.getItem('jn_orders') || '[]');
+    orders.unshift(order); // newest first
+    // Keep last 100 only
+    if (orders.length > 100) orders.length = 100;
+    localStorage.setItem('jn_orders', JSON.stringify(orders));
+  } catch (e) {
+    console.error('Failed to save order locally', e);
+  }
 }
 
 function closeSuccess() {
