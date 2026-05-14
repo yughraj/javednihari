@@ -653,9 +653,20 @@ window.JNFirebase = { db, collection, addDoc, serverTimestamp };
 
 <script>
 // ============================================
+// CART (state declared early so functions can use it)
+// ============================================
+const cart = [];
+let currentOrderType = 'delivery';
+let currentDeliveryFee = 0;
+
+// ============================================
 // CONFIG — easy to edit when owner provides real numbers
 // ============================================
 const CONFIG = {
+  // TEST MODE — set to false when going live with real customers
+  // When true: ignores opening hours, ordering works 24/7 (for testing)
+  TEST_MODE: true,
+  
   // Operating hours (24-hour format)
   openHour: 11,        // 11 AM
   closeHour: 24,       // Midnight (24 = next day 00:00)
@@ -786,6 +797,7 @@ renderMenu();
 // OPENING HOURS CHECK
 // ============================================
 function isOpen() {
+  if (CONFIG.TEST_MODE) return true;  // Always open in test mode
   const now = new Date();
   const hour = now.getHours();
   // closeHour 24 means open until midnight (i.e., until 23:59)
@@ -826,9 +838,8 @@ updateClosedState();
 setInterval(updateClosedState, 60000); // Re-check every minute
 
 // ============================================
-// CART
+// CART OPERATIONS
 // ============================================
-const cart = [];
 
 function addToCart(name, price, img, btn) {
   const existing = cart.find(i => i.name === name);
@@ -856,9 +867,6 @@ function removeItem(name) {
   if (idx > -1) cart.splice(idx, 1);
   renderCart();
 }
-
-let currentOrderType = 'delivery';
-let currentDeliveryFee = 0;
 
 function renderCart() {
   const itemsWrap = document.getElementById('cartItems');
