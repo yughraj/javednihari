@@ -91,9 +91,33 @@ a { color: var(--gold); text-decoration: none; }
 .action-btn.wa { background: rgba(37, 211, 102, 0.1); border-color: rgba(37, 211, 102, 0.3); color: #25d366; }
 .action-btn.wa:hover { background: rgba(37, 211, 102, 0.2); }
 .action-btn.cancel:hover { border-color: var(--red); color: var(--red); }
+.action-btn.print { background: rgba(96, 165, 250, 0.1); border-color: rgba(96, 165, 250, 0.3); color: var(--blue); }
+.action-btn.print:hover { background: rgba(96, 165, 250, 0.2); border-color: var(--blue); color: var(--blue); }
 .empty-state { text-align: center; padding: 4rem 2rem; color: var(--text-soft); }
 .empty-state .icon { font-size: 3.5rem; opacity: 0.3; margin-bottom: 1rem; }
 .empty-state h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; color: var(--cream); margin-bottom: 0.5rem; }
+
+/* PRINT RECEIPT STYLES — only visible when printing */
+#printArea { display: none; }
+@media print {
+  body * { visibility: hidden; }
+  #printArea, #printArea * { visibility: visible; }
+  #printArea { display: block; position: absolute; left: 0; top: 0; width: 100%; background: white; color: black; padding: 20px; font-family: 'Courier New', monospace; font-size: 13px; }
+  #printArea .receipt { max-width: 320px; margin: 0 auto; }
+  #printArea h1 { font-size: 22px; text-align: center; margin-bottom: 4px; font-weight: 700; letter-spacing: 1px; }
+  #printArea .tagline { text-align: center; font-size: 11px; margin-bottom: 10px; font-style: italic; }
+  #printArea .divider { border-top: 2px dashed #000; margin: 8px 0; }
+  #printArea .divider-thin { border-top: 1px dashed #000; margin: 6px 0; }
+  #printArea .order-no-print { font-size: 18px; text-align: center; font-weight: 700; margin: 10px 0; letter-spacing: 2px; }
+  #printArea .row { display: flex; justify-content: space-between; padding: 2px 0; }
+  #printArea .row .label-p { font-weight: 700; }
+  #printArea .items-print { margin: 8px 0; }
+  #printArea .items-print .item-row { display: flex; justify-content: space-between; padding: 3px 0; }
+  #printArea .total-row { font-size: 16px; font-weight: 700; padding: 6px 0; }
+  #printArea .footer-p { text-align: center; font-size: 11px; margin-top: 12px; }
+  #printArea .note-p { background: #ffffcc; padding: 6px; border: 1px dashed #000; margin: 8px 0; font-size: 12px; }
+  #printArea .order-type-banner { text-align: center; font-weight: 700; font-size: 14px; padding: 4px; border: 2px solid #000; margin: 8px 0; letter-spacing: 1px; }
+}
 
 @media (max-width: 768px) {
   .stats-grid { grid-template-columns: 1fr 1fr; }
@@ -318,6 +342,72 @@ window.whatsappCustomer = (phone, orderNo) => {
   window.open(`https://wa.me/${waNum}?text=${msg}`, '_blank');
 };
 
+window.printOrder = (orderId) => {
+  const order = allOrders.find(o => o.id === orderId);
+  if (!order) return;
+  
+  const items = (order.items || []).map(i => 
+    `<div class="item-row"><span>${i.qty}× ${escapeHtml(i.name)}</span><span>Rs. ${(i.price * i.qty).toLocaleString()}</span></div>`
+  ).join('');
+  
+  const orderDate = new Date(order.createdAt);
+  const dateStr = orderDate.toLocaleDateString('en-PK', { day: '2-digit', month: 'short', year: 'numeric' });
+  const timeStr = orderDate.toLocaleTimeString('en-PK', { hour: '2-digit', minute: '2-digit', hour12: true });
+  
+  const locationLine = order.orderType === 'pickup'
+    ? `<div class="row"><span class="label-p">PICKUP:</span><span>${escapeHtml(order.branch || '-')}</span></div>`
+    : `<div class="row"><span class="label-p">AREA:</span><span>${escapeHtml(order.area || '-')}</span></div>
+       <div style="padding: 4px 0;"><span class="label-p">ADDRESS:</span><br>${escapeHtml(order.address || '-')}</div>`;
+  
+  const noteSection = order.notes ? `<div class="note-p"><strong>NOTE:</strong> ${escapeHtml(order.notes)}</div>` : '';
+  
+  document.getElementById('printArea').innerHTML = `
+    <div class="receipt">
+      <h1>JAVED NIHARI</h1>
+      <div class="tagline">Karachi's Legendary Nihari Since 1985</div>
+      <div class="divider"></div>
+      
+      <div class="order-type-banner">${order.orderType === 'pickup' ? '★ PICKUP ORDER ★' : '★ HOME DELIVERY ★'}</div>
+      
+      <div class="order-no-print">${escapeHtml(order.orderNo)}</div>
+      
+      <div class="divider-thin"></div>
+      
+      <div class="row"><span class="label-p">DATE:</span><span>${dateStr}</span></div>
+      <div class="row"><span class="label-p">TIME:</span><span>${timeStr}</span></div>
+      <div class="row"><span class="label-p">CUSTOMER:</span><span>${escapeHtml(order.name)}</span></div>
+      <div class="row"><span class="label-p">PHONE:</span><span>${escapeHtml(order.phone)}</span></div>
+      ${locationLine}
+      
+      ${noteSection}
+      
+      <div class="divider"></div>
+      <div style="text-align: center; font-weight: 700; letter-spacing: 2px;">ORDER ITEMS</div>
+      <div class="divider-thin"></div>
+      
+      <div class="items-print">${items}</div>
+      
+      <div class="divider-thin"></div>
+      <div class="row"><span>Subtotal</span><span>Rs. ${(order.subtotal || 0).toLocaleString()}</span></div>
+      <div class="row"><span>${order.orderType === 'pickup' ? 'Pickup' : 'Delivery'}</span><span>${(order.deliveryFee || 0) === 0 ? 'Free' : 'Rs. ' + order.deliveryFee.toLocaleString()}</span></div>
+      <div class="divider-thin"></div>
+      <div class="row total-row"><span>TOTAL</span><span>Rs. ${(order.total || 0).toLocaleString()}</span></div>
+      <div class="divider"></div>
+      
+      <div style="text-align: center; font-weight: 700; font-size: 14px; padding: 4px 0;">PAYMENT: CASH</div>
+      
+      <div class="divider"></div>
+      <div class="footer-p">
+        Thank you for ordering!<br>
+        WhatsApp: 0333-3672590<br>
+        javednihari.com
+      </div>
+    </div>
+  `;
+  
+  window.print();
+};
+
 // FORMATTING HELPERS
 function formatTime(ts) {
   if (!ts) return 'Just now';
@@ -433,6 +523,7 @@ function render() {
           <div class="order-total">Rs. ${(o.total || 0).toLocaleString()}</div>
           <div class="order-actions">
             <button class="action-btn wa" onclick="whatsappCustomer('${escapeHtml(o.phone)}', '${escapeHtml(o.orderNo)}')">WhatsApp</button>
+            <button class="action-btn print" onclick="printOrder('${o.id}')">🖨 Print Slip</button>
             ${actions}
           </div>
         </div>
@@ -440,6 +531,9 @@ function render() {
   }).join('');
 }
 </script>
+
+<!-- HIDDEN PRINT AREA — populated dynamically when "Print Slip" is clicked -->
+<div id="printArea"></div>
 
 </body>
 </html>
